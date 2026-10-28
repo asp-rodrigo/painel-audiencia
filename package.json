@@ -1,0 +1,14 @@
+{
+  "name": "dashboard-obope",
+  "version": "1.0.0",
+  "description": "Dashboard local de audiência (TV e Rádio) a partir de fifty5blue.com/pt/dados-de-audiencia",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "build": "node scripts/build-site.js"
+  }
+}

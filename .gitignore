@@ -1,0 +1,6 @@
+dist/
+node_modules/
+.claude/
+.DS_Store
+*.tmp
+planilhas/

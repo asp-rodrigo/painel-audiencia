@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Painel de Audiência</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Painel de Audiência</h1>
+      <p class="sub">TV e Rádio · dados públicos do IBOPE em
+        <a href="https://www.fifty5blue.com/pt/dados-de-audiencia" target="_blank" rel="noopener">fifty5blue.com</a></p>
+    </div>
+    <div class="sync">
+      <span id="sync-status" class="sync-status">Carregando…</span>
+      <button id="sync-btn" type="button">Verificar agora</button>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="tv" aria-selected="true">TV · Top 10 semanal</button>
+    <button role="tab" data-tab="radio" aria-selected="false">Rádio · trimestral</button>
+    <button role="tab" data-tab="comercial" aria-selected="false" hidden>Comercial · SBT e RECORD</button>
+  </nav>
+
+  <main>
+    <!-- ------------------------------------------------ TV -->
+    <section id="tab-tv" class="tab-panel">
+      <div class="filters">
+        <label>Semana <select id="tv-week"></select></label>
+        <label>Praça <select id="tv-market"></select></label>
+        <a id="tv-source" class="source-link" target="_blank" rel="noopener">Ver post original ↗</a>
+      </div>
+
+      <p id="tv-headline" class="headline"></p>
+      <div id="tv-kpis" class="kpis"></div>
+
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>Média do Top 10 por emissora</h2>
+            <p class="hint">Audiência domiciliar (Rat%) média dos 10 programas mais vistos de cada emissora na semana</p>
+          </div>
+          <div class="seg" id="tv-range">
+            <button data-weeks="13">3 meses</button>
+            <button data-weeks="26">6 meses</button>
+            <button data-weeks="52" class="on">1 ano</button>
+            <button data-weeks="156">3 anos</button>
+            <button data-weeks="0">Tudo</button>
+          </div>
+        </div>
+        <div id="tv-trend" class="chart"></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h2>Programas mais vistos da semana</h2>
+              <p class="hint">Top 15 entre todas as emissoras · Rat% domiciliar</p>
+            </div>
+          </div>
+          <div id="tv-top" class="chart"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h2>Histórico de um programa</h2>
+              <p class="hint">Clique em um programa da tabela ou pesquise pelo nome</p>
+            </div>
+          </div>
+          <input id="tv-program" class="search" list="tv-programs" placeholder="Ex.: JORNAL NACIONAL" />
+          <datalist id="tv-programs"></datalist>
+          <div id="tv-program-chart" class="chart"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>Ranking completo da semana</h2>
+            <p class="hint" id="tv-units-hint"></p>
+          </div>
+          <div class="chips" id="tv-networks"></div>
+        </div>
+        <div class="table-wrap"><table id="tv-table" class="data"></table></div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------ Rádio -->
+    <section id="tab-radio" class="tab-panel" hidden>
+      <div class="filters">
+        <label>Período <select id="radio-period"></select></label>
+        <label>Praça <select id="radio-market"></select></label>
+        <label>Unidade <select id="radio-unit">
+          <option value="OPM">Ouvintes por minuto (OPM) · 2022 em diante</option>
+          <option value="IA%">Índice de audiência (%) · 2014–2022</option>
+        </select></label>
+      </div>
+
+      <div id="radio-kpis" class="kpis"></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h2>Audiência de rádio por praça</h2>
+              <p class="hint" id="radio-bars-hint"></p>
+            </div>
+          </div>
+          <div id="radio-bars" class="chart"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h2 id="radio-trend-title">Evolução</h2>
+              <p class="hint" id="radio-trend-hint"></p>
+            </div>
+          </div>
+          <div id="radio-trend" class="chart"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div><h2 id="radio-table-title">Histórico da praça</h2></div></div>
+        <div class="table-wrap"><table id="radio-table" class="data"></table></div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------ Comercial (planilhas internas) -->
+    <section id="tab-comercial" class="tab-panel" hidden>
+      <div class="filters">
+        <label>Mês <select id="com-period"></select></label>
+        <label>Emissora <select id="com-network">
+          <option value="">SBT e RECORD</option>
+          <option value="SBT">SBT</option>
+          <option value="RECORD">RECORD</option>
+        </select></label>
+        <label>Dias <select id="com-days">
+          <option value="">Todos</option>
+          <option>Segunda a sexta</option>
+          <option>Sábado</option>
+          <option>Domingo</option>
+        </select></label>
+        <label>Faixa <select id="com-daypart">
+          <option value="">Todas</option>
+          <option>Manhã</option>
+          <option>Tarde</option>
+          <option>Noite</option>
+          <option>Madrugada</option>
+        </select></label>
+      </div>
+
+      <p id="com-headline" class="headline"></p>
+      <div id="com-kpis" class="kpis"></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h2>Preço × audiência</h2>
+              <p class="hint">Cada ponto é um programa. Abaixo da linha tracejada, o custo por ponto é menor que a mediana do mês.</p>
+            </div>
+          </div>
+          <div id="com-scatter" class="chart"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h2>Evolução mensal da grade</h2>
+              <p class="hint" id="com-trend-hint"></p>
+            </div>
+            <div class="seg" id="com-metric">
+              <button data-metric="cpp" class="on">Custo por ponto</button>
+              <button data-metric="pontos">Pontos</button>
+            </div>
+          </div>
+          <div id="com-trend" class="chart"></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h2>Menor custo por ponto</h2>
+              <p class="hint">Os 15 programas mais eficientes no filtro atual · R$ por ponto de audiência</p>
+            </div>
+          </div>
+          <div id="com-bars" class="chart"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h2 id="com-program-title">Histórico do programa</h2>
+              <p class="hint">Pontos da planilha comparados à audiência domiciliar do IBOPE em Grande São Paulo (média das semanas do mês, quando o programa entrou no Top 10)</p>
+            </div>
+          </div>
+          <div id="com-program-chart" class="chart"></div>
+          <p id="com-program-note" class="note"></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>Grade completa</h2>
+            <p class="hint" id="com-table-hint"></p>
+          </div>
+        </div>
+        <div class="table-wrap"><table id="com-table" class="data"></table></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+  <div id="tooltip" class="tooltip" hidden></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
